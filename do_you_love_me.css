@@ -1,0 +1,37 @@
+// اختيار العناصر
+const yesButton = document.getElementById('yesButton');
+const noButton = document.getElementById('noButton');
+const videoContainer = document.getElementById('videoContainer');
+const loveVideo = document.getElementById('loveVideo');
+const finalMessage = document.getElementById('finalMessage');
+
+// دالة لإظهار الفيديو والرسالة النهائية
+function showVideoAndMessage() {
+    // إظهار الفيديو
+    videoContainer.style.display = 'block';
+    loveVideo.play();
+
+    // عند انتهاء الفيديو، إظهار الرسالة النهائية
+    loveVideo.addEventListener('ended', function () {
+        videoContainer.style.display = 'none'; // إخفاء الفيديو
+        finalMessage.style.display = 'block'; // إظهار الرسالة
+    });
+}
+
+// إضافة حدث للزر "Yes" (يعمل مع click و touchstart)
+['click', 'touchstart'].forEach(eventType => {
+    yesButton.addEventListener(eventType, function (event) {
+        event.preventDefault(); // منع السلوك الافتراضي
+        showVideoAndMessage();
+    });
+});
+
+// إضافة رد فعل للزر "No"
+noButton.addEventListener('click', function () {
+    alert("Why not? 😢");
+});
+
+// معالجة اللمسات المتكررة على الهواتف المحمولة
+yesButton.addEventListener('touchstart', function (event) {
+    event.stopPropagation(); // منع انتشار الحدث
+});
