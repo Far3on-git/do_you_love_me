@@ -1,28 +1,41 @@
-const questionContainer = document.querySelector(".question-container");
-const resultContainer = document.querySelector(".result-container.yes");
-const gifResult = document.querySelector(".gif-result");
-const heartLoader = document.querySelector(".cssload-main");
-const yesBtn = document.querySelector(".js-yes-btn");
-const noBtn = document.querySelector(".js-no-btn");
+// الحصول على الزر
+const noButton = document.getElementById("noButton");
 
-// /change the postion of no button
-noBtn.addEventListener("mouseover", () => {
-  const newX = Math.floor(Math.random() * questionContainer.offsetWidth);
-  const newY = Math.floor(Math.random() * questionContainer.offsetWidth);
+// متغير لتحديد ما إذا كان الزر يتحرك بالفعل
+let isMoving = false;
 
-  noBtn.style.left = `${newX}px`;
-  noBtn.style.top = `${newY}px`;
+// دالة لتحريك الزر
+function moveButton() {
+    if (isMoving) return; // إذا كان الزر يتحرك بالفعل، نوقف الدالة
+
+    isMoving = true; // تحديد أن الزر بدأ في الحركة
+
+    let x = 0;
+    let y = 0;
+
+    const intervalId = setInterval(() => {
+        // تحريك عشوائي للزر
+        x += Math.random() * 10 - 5;
+        y += Math.random() * 10 - 5;
+
+        noButton.style.transform = `translate(${x}px, ${y}px)`;
+
+        // إيقاف الحركة بعد فترة زمنية معينة أو عند الوصول إلى شرط معين
+        if (Math.abs(x) > 100 || Math.abs(y) > 100) {
+            clearInterval(intervalId);
+            isMoving = false; // إعادة تعيين الحالة بعد انتهاء الحركة
+        }
+    }, 100);
+}
+
+// معالجة حدث النقر (للأجهزة المكتبية)
+noButton.addEventListener("click", function(event) {
+    event.preventDefault(); // منع السلوك الافتراضي
+    moveButton(); // تشغيل دالة الحركة
 });
 
-// yes button functionality
-
-yesBtn.addEventListener("click", () => {
-  questionContainer.style.display = "none";
-  heartLoader.style.display = "inherit";
-
-  const timeoutId = setTimeout(() => {
-    heartLoader.style.display = "none";
-    resultContainer.style.display = "inherit";
-    gifResult.play();
-  }, 3000);
+// معالجة حدث اللمس (للأجهزة المحمولة)
+noButton.addEventListener("touchstart", function(event) {
+    event.preventDefault(); // منع السلوك الافتراضي
+    moveButton(); // تشغيل دالة الحركة
 });
